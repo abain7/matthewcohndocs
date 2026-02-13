@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Matthew Cohn | Documentary Editor</title>
+    <meta name="description" content="Matthew Cohn is a documentary editor whose work has shown at Sundance, Cannes, and Hot Docs, with broadcasts on PBS.">
+    <link rel="canonical" href="https://matthewcohndocs.com">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://matthewcohndocs.com">
+    <meta property="og:title" content="Matthew Cohn | Documentary Editor">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #fff;
+            --color-text: #1a1a1a;
+            --color-text-secondary: #86868b;
+            --color-border: #e5e5e5;
+            --color-hover: #f5f5f5;
+            --font-display: 'EB Garamond', Georgia, serif;
+            --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+            --transition-fast: .15s ease;
+            --transition-medium: .3s ease;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+        body { font-family: var(--font-body); background: var(--color-bg); color: var(--color-text); line-height: 1.6; min-height: 100vh; }
+        .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(255,255,255,.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 1.25rem 3rem; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { font-family: var(--font-display); font-size: 1.25rem; font-weight: 500; text-decoration: none; color: var(--color-text); }
+        .nav-logo.hidden-on-home { opacity: 0; pointer-events: none; }
+        .nav-menu { display: flex; gap: 3rem; align-items: center; }
+        .nav-item { font-size: .7rem; font-weight: 500; text-transform: uppercase; letter-spacing: .12em; text-decoration: none; color: var(--color-text-secondary); transition: color var(--transition-fast); }
+        .nav-item:hover { color: var(--color-text); }
+        .nav-dropdown { position: relative; }
+        .nav-dropdown-content { position: absolute; top: 100%; right: 0; background: #fff; border: 1px solid var(--color-border); border-radius: 8px; padding: .5rem 0; min-width: 220px; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all var(--transition-fast); box-shadow: 0 4px 20px rgba(0,0,0,.08); }
+        .nav-dropdown:hover .nav-dropdown-content { opacity: 1; visibility: visible; transform: translateY(0); }
+        .nav-dropdown-item { display: block; padding: .6rem 1.25rem; font-size: .7rem; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; text-decoration: none; color: var(--color-text-secondary); transition: all var(--transition-fast); }
+        .nav-dropdown-item:hover { background: var(--color-hover); color: var(--color-text); }
+        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 5px; z-index: 1001; }
+        .hamburger span { width: 24px; height: 2px; background: var(--color-text); transition: all var(--transition-fast); }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+        .mobile-menu { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #fff; z-index: 999; padding: 80px 2rem 2rem; flex-direction: column; gap: 1.5rem; overflow-y: auto; }
+        .mobile-menu.active { display: flex; }
+        .mobile-menu-item { font-size: 1.25rem; font-weight: 500; text-transform: uppercase; letter-spacing: .1em; text-decoration: none; color: var(--color-text); padding: .75rem 0; border-bottom: 1px solid var(--color-border); }
+        .mobile-menu-section { padding-top: .5rem; }
+        .mobile-menu-section-title { font-size: .7rem; font-weight: 500; text-transform: uppercase; letter-spacing: .15em; color: var(--color-text-secondary); margin-bottom: .75rem; }
+        .mobile-film-item { display: block; font-size: 1rem; text-decoration: none; color: var(--color-text); padding: .5rem 0; }
+        .page { display: none; min-height: 100vh; }
+        .page.active { display: block; }
+        main { padding-top: 70px; }
+        .home-hero { text-align: left; padding: 4rem 3rem 3rem; max-width: 1400px; margin: 0 auto; }
+        .home-name { font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 400; letter-spacing: -.02em; margin-bottom: .25rem; }
+        .home-title { font-size: .7rem; font-weight: 500; text-transform: uppercase; letter-spacing: .2em; color: var(--color-text-secondary); margin-bottom: .5rem; }
+        .home-tagline { font-family: var(--font-display); font-size: 1.1rem; font-style: italic; color: var(--color-text-secondary); max-width: 600px; }
+        .film-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; padding: 0 3rem 4rem; max-width: 1400px; margin: 0 auto; }
+        .film-card { cursor: pointer; text-decoration: none; color: inherit; }
+        .film-poster-container { position: relative; aspect-ratio: 2/3; overflow: hidden; background: #1a1a1a; border-radius: 4px; margin-bottom: 1rem; }
+        .film-poster { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: transform var(--transition-medium); }
+        .film-poster.zoom-out { object-fit: contain; }
+        .film-card:hover .film-poster { transform: scale(1.02); }
+        .film-info { display: flex; justify-content: space-between; align-items: baseline; }
+        .film-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 500; }
+        .film-year { font-size: .8rem; color: var(--color-text-secondary); }
+        .film-detail { max-width: 1100px; margin: 0 auto; padding: 2rem 3rem; }
+        .film-detail-layout { display: grid; grid-template-columns: 1fr 1.5fr; gap: 4rem; align-items: start; }
+        .film-detail-poster { position: sticky; top: 100px; }
+        .film-detail-poster a { display: block; cursor: pointer; }
+        .film-detail-poster img { width: 100%; border-radius: 4px; box-shadow: 0 8px 30px rgba(0,0,0,.12); transition: transform .2s ease, box-shadow .2s ease; }
+        .film-detail-poster a:hover img { transform: scale(1.02); box-shadow: 0 12px 40px rgba(0,0,0,.18); }
+        .film-detail-content h1 { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); font-weight: 400; margin-bottom: .5rem; letter-spacing: -.02em; }
+        .film-detail-year { font-size: 1rem; color: var(--color-text-secondary); margin-bottom: 2rem; }
+        .film-detail-section { margin-bottom: 2rem; }
+        .film-detail-section h2 { font-size: .7rem; font-weight: 600; text-transform: uppercase; letter-spacing: .15em; color: var(--color-text-secondary); margin-bottom: .75rem; }
+        .film-detail-section p { font-size: 1rem; line-height: 1.8; }
+        .film-detail-section ul { list-style: none; font-size: 1rem; line-height: 1.8; }
+        .film-detail-section ul li { margin-bottom: .5rem; white-space: nowrap; }
+        .back-link { display: inline-flex; align-items: center; gap: .5rem; font-size: .75rem; font-weight: 500; text-transform: uppercase; letter-spacing: .1em; color: var(--color-text-secondary); text-decoration: none; margin-bottom: 2rem; transition: color var(--transition-fast); }
+        .back-link:hover { color: var(--color-text); }
+        .film-website-link { display: inline-flex; align-items: center; gap: .5rem; margin-top: 1.5rem; padding: .75rem 1.25rem; background: var(--color-text); color: #fff; border-radius: 6px; font-size: .75rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; transition: all var(--transition-fast); }
+        .film-website-link:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+        .film-website-link svg { width: 14px; height: 14px; }
+        .about-hero-image { width: 100%; max-width: 480px; margin: 0 auto; padding: 6rem 2rem 0; }
+        .about-hero-image img { width: 100%; height: auto; border-radius: 4px; box-shadow: 0 8px 30px rgba(0,0,0,.12); }
+        .about-content-section { max-width: 680px; margin: 0 auto; padding: 4rem 2rem 8rem; text-align: center; }
+        .about-content-section h1 { font-family: var(--font-display); font-size: 3.5rem; font-weight: 400; letter-spacing: -.025em; margin-bottom: .5rem; }
+        .about-title-label { font-size: .7rem; font-weight: 500; text-transform: uppercase; letter-spacing: .2em; color: var(--color-text-secondary); margin-bottom: 4rem; }
+        .about-bio { text-align: left; margin-bottom: 4rem; }
+        .about-bio p { font-size: 1.0625rem; line-height: 1.8; margin-bottom: 1.5rem; }
+        .imdb-button { display: inline-flex; align-items: center; gap: .75rem; background: var(--color-text); color: #f5c518; padding: .875rem 1.5rem; border-radius: 8px; text-decoration: none; font-size: .8rem; font-weight: 600; transition: transform .2s ease, box-shadow .2s ease; }
+        .imdb-button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+        .imdb-button svg { width: 40px; height: 20px; }
+        .contact-content { max-width: 600px; margin: 0 auto; padding: 4rem 2rem 8rem; }
+        .contact-content h1 { font-family: var(--font-display); font-size: 3rem; font-weight: 400; letter-spacing: -.025em; margin-bottom: .5rem; }
+        .contact-subtitle { font-size: 1rem; color: var(--color-text-secondary); margin-bottom: 3rem; }
+        .contact-form { display: flex; flex-direction: column; gap: 1.5rem; }
+        .form-group { display: flex; flex-direction: column; gap: .5rem; }
+        .form-group label { font-size: .7rem; font-weight: 600; text-transform: uppercase; letter-spacing: .15em; color: var(--color-text-secondary); }
+        .form-group input, .form-group textarea { background: #fff; border: 1px solid var(--color-border); border-radius: 6px; padding: 1rem; font-size: 1rem; font-family: var(--font-body); color: var(--color-text); transition: border-color var(--transition-fast); }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--color-text); }
+        .form-group textarea { min-height: 150px; resize: vertical; }
+        .submit-button { background: var(--color-text); color: #fff; border: none; border-radius: 6px; padding: 1rem 2rem; font-size: .8rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; transition: all var(--transition-fast); align-self: flex-start; }
+        .submit-button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+        .submit-button:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+        .form-status { padding: 1rem; border-radius: 6px; font-size: .9rem; display: none; }
+        .form-status.success { display: block; background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; }
+        .form-status.error { display: block; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+        .page-footer { border-top: 1px solid var(--color-border); padding: 2rem 3rem; display: flex; justify-content: space-between; font-size: .75rem; color: var(--color-text-secondary); max-width: 1400px; margin: 4rem auto 0; }
+        .page-footer a { color: var(--color-text-secondary); text-decoration: none; }
+        .page-footer a:hover { color: var(--color-text); }
+        @media (max-width: 900px) {
+            .film-gallery { grid-template-columns: repeat(2, 1fr); }
+            .film-detail-layout { grid-template-columns: 1fr; gap: 2rem; }
+            .film-detail-poster { position: static; max-width: 400px; }
+            .about-hero-image { max-width: 400px; }
+            .about-content-section { padding: 3rem 2rem 6rem; }
+            .about-content-section h1 { font-size: 2.5rem; }
+            .about-title-label { margin-bottom: 3rem; }
+            .about-bio { margin-bottom: 3rem; }
+        }
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .hamburger { display: flex; }
+            .nav { padding: 1rem 1.5rem; }
+            .home-hero { padding: 3rem 1.5rem 2rem; }
+            .home-name { font-size: 2.5rem; }
+            .home-tagline { font-size: 1rem; }
+            .film-gallery { grid-template-columns: 1fr; padding: 0 1.5rem 3rem; gap: 2rem; }
+            .film-detail { padding: 1.5rem; }
+            .film-detail-content h1 { font-size: 1.75rem; }
+            .film-detail-section ul li { white-space: normal; }
+            .film-detail-poster { max-width: 100%; }
+            .film-website-link { width: 100%; justify-content: center; }
+            .about-hero-image { max-width: 320px; padding: 4rem 1.5rem 0; }
+            .about-content-section { padding: 2.5rem 1.5rem 4rem; }
+            .about-content-section h1 { font-size: 2rem; }
+            .contact-content { padding: 3rem 1.5rem 4rem; }
+            .contact-content h1 { font-size: 2rem; }
+            .page-footer { flex-direction: column; gap: .5rem; text-align: center; padding: 2rem 1.5rem; }
+            .submit-button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div id="home" class="page active">
+        <nav class="nav">
+            <a href="#home" class="nav-logo hidden-on-home">Matthew Cohn</a>
+            <div class="nav-menu">
+                <div class="nav-dropdown">
+                    <a href="#home" class="nav-item">FILMS</a>
+                    <div class="nav-dropdown-content">
+                        <a href="#film-mom-scientist" class="nav-dropdown-item">My Mom, The Scientist</a>
+                        <a href="#film-last-spy" class="nav-dropdown-item">The Last Spy</a>
+                        <a href="#film-place-absence" class="nav-dropdown-item">A Place of Absence</a>
+                        <a href="#film-strangers-peace" class="nav-dropdown-item">Strangers to Peace</a>
+                        <a href="#film-through-lens" class="nav-dropdown-item">Through A Lens Darkly</a>
+                        <a href="#film-councilwoman" class="nav-dropdown-item">Councilwoman</a>
+                        <a href="#film-bangla-surf" class="nav-dropdown-item">Bangla Surf Girls</a>
+                    </div>
+                </div>
+                <a href="#about" class="nav-item">ABOUT</a>
+                <a href="#contact" class="nav-item">CONTACT</a>
+            </div>
+            <div class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></div>
+        </nav>
+        <main>
+            <div class="home-hero">
+                <h1 class="home-name">Matthew Cohn</h1>
+                <p class="home-title">Documentary Editor</p>
+                <p class="home-tagline">Inspiration by a thousand cuts.</p>
+            </div>
+            <div class="film-gallery">
+                <a href="#film-mom-scientist" class="film-card">
+                    <div class="film-poster-container"><img src="images/my-mom-the-scientist.png" alt="My Mom, The Scientist" class="film-poster zoom-out"></div>
+                    <div class="film-info"><span class="film-title">My Mom, The Scientist</span><span class="film-year">Coming Soon</span></div>
+                </a>
+                <a href="#film-last-spy" class="film-card">
+                    <div class="film-poster-container"><img src="images/the-last-spy.png" alt="The Last Spy" class="film-poster zoom-out"></div>
+                    <div class="film-info"><span class="film-title">The Last Spy</span><span class="film-year">2025</span></div>
+                </a>
+                <a href="#film-place-absence" class="film-card">
+                    <div class="film-poster-container"><img src="images/a-place-of-absence.png" alt="A Place of Absence" class="film-poster"></div>
+                    <div class="film-info"><span class="film-title">A Place of Absence</span><span class="film-year">2025</span></div>
+                </a>
+                <a href="#film-strangers-peace" class="film-card">
+                    <div class="film-poster-container"><img src="images/strangers-to-peace.png" alt="Strangers to Peace" class="film-poster zoom-out"></div>
+                    <div class="film-info"><span class="film-title">Strangers to Peace</span><span class="film-year">2022</span></div>
+                </a>
+                <a href="#film-through-lens" class="film-card">
+                    <div class="film-poster-container"><img src="images/through-a-lens-darkly.jpeg" alt="Through A Lens Darkly" class="film-poster"></div>
+                    <div class="film-info"><span class="film-title">Through A Lens Darkly</span><span class="film-year">2014</span></div>
+                </a>
+                <a href="#film-councilwoman" class="film-card">
+                    <div class="film-poster-container"><img src="images/councilwoman.jpeg" alt="Councilwoman" class="film-poster"></div>
+                    <div class="film-info"><span class="film-title">Councilwoman</span><span class="film-year">2019</span></div>
+                </a>
+                <a href="#film-bangla-surf" class="film-card">
+                    <div class="film-poster-container"><img src="images/bangla-surf-girls.jpg" alt="Bangla Surf Girls" class="film-poster"></div>
+                    <div class="film-info"><span class="film-title">Bangla Surf Girls</span><span class="film-year">2021</span></div>
+                </a>
+            </div>
+            <div class="page-footer"><div>© 2026 Matthew Cohn</div><div><a href="#contact">Contact</a></div></div>
+        </main>
+    </div>
+
+    <div id="film-mom-scientist" class="page">
+        <nav class="nav"><a href="#home" class="nav-logo">Matthew Cohn</a><div class="nav-menu"><div class="nav-dropdown"><a href="#home" class="nav-item">FILMS</a><div class="nav-dropdown-content"><a href="#film-mom-scientist" class="nav-dropdown-item">My Mom, The Scientist</a><a href="#film-last-spy" class="nav-dropdown-item">The Last Spy</a><a href="#film-place-absence" class="nav-dropdown-item">A Place of Absence</a><a href="#film-strangers-peace" class="nav-dropdown-item">Strangers to Peace</a><a href="#film-through-lens" class="nav-dropdown-item">Through A Lens Darkly</a><a href="#film-councilwoman" class="nav-dropdown-item">Councilwoman</a><a href="#film-bangla-surf" class="nav-dropdown-item">Bangla Surf Girls</a></div></div><a href="#about" class="nav-item">ABOUT</a><a href="#contact" class="nav-item">CONTACT</a></div><div class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></div></nav>
+        <main><div class="film-detail"><a href="#home" class="back-link">← Back to Films</a><div class="film-detail-layout"><div class="film-detail-poster"><a href="https://mymomthescientist.com/" target="_blank" rel="noopener"><img src="images/my-mom-the-scientist.png" alt="My Mom, The Scientist"></a></div><div class="film-detail-content"><h1>My Mom, The Scientist</h1><p class="film-detail-year">Coming Soon</p><div class="film-detail-section"><h2>Synopsis</h2><p>My Mom, The Scientist explores the extraordinary life of the director's mother, Rudean Leinaeng, who overcame discrimination to become a beloved professor of Chemistry at Bronx Community College and a fearless global activist for human rights.</p></div><div class="film-detail-section"><h2>Director</h2><p>Thomas Allen Harris</p></div><div class="film-detail-section"><h2>Producers</h2><p>Thomas Allen Harris, Don Perry, Shanti Avirgan</p></div><a href="https://mymomthescientist.com/" target="_blank" rel="noopener" class="film-website-link"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>Visit Official Website</a></div></div></div><div class="page-footer"><div>© 2026 Matthew Cohn</div><div><a href="#contact">Contact</a></div></div></main>
+    </div>
+
+    <div id="film-last-spy" class="page">
+        <nav class="nav"><a href="#home" class="nav-logo">Matthew Cohn</a><div class="nav-menu"><div class="nav-dropdown"><a href="#home" class="nav-item">FILMS</a><div class="nav-dropdown-content"><a href="#film-mom-scientist" class="nav-dropdown-item">My Mom, The Scientist</a><a href="#film-last-spy" class="nav-dropdown-item">The Last Spy</a><a href="#film-place-absence" class="nav-dropdown-item">A Place of Absence</a><a href="#film-strangers-peace" class="nav-dropdown-item">Strangers to Peace</a><a href="#film-through-lens" class="nav-dropdown-item">Through A Lens Darkly</a><a href="#film-councilwoman" class="nav-dropdown-item">Councilwoman</a><a href="#film-bangla-surf" class="nav-dropdown-item">Bangla Surf Girls</a></div></div><a href="#about" class="nav-item">ABOUT</a><a href="#contact" class="nav-item">CONTACT</a></div><div class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></div></nav>
+        <main><div class="film-detail"><a href="#home" class="back-link">← Back to Films</a><div class="film-detail-layout"><div class="film-detail-poster"><a href="https://www.thelastspyfilm.com/" target="_blank" rel="noopener"><img src="images/the-last-spy.png" alt="The Last Spy"></a></div><div class="film-detail-content"><h1>The Last Spy</h1><p class="film-detail-year">2025</p><div class="film-detail-section"><h2>Synopsis</h2><p>The Last Spy is a riveting portrait of 100-year-old CIA spymaster Peter Sichel. From escaping Nazi Germany as a Jewish refugee to becoming the first CIA Station chief in post-war Berlin and a key player in Cold War espionage, Sichel unpacks the obscured roots of many conflicts that shape today's world.</p></div><div class="film-detail-section"><h2>Director</h2><p>Katharina Otto-Bernstein</p></div><div class="film-detail-section"><h2>Producers</h2><p>Katharina Otto-Bernstein, Oleg Dubson</p></div><div class="film-detail-section"><h2>Festivals</h2><ul><li>Filmfest München 2025</li><li>Haifa International Film Festival 2025</li><li>Miami Jewish Film Festival 2025</li><li>Palm Springs Jewish Film Festival 2026</li><li>New York Jewish Film Festival 2026</li></ul></div><a href="https://www.thelastspyfilm.com/" target="_blank" rel="noopener" class="film-website-link"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>Visit Official Website</a></div></div></div><div class="page-footer"><div>© 2026 Matthew Cohn</div><div><a href="#contact">Contact</a></div></div></main>
+    </div>
+
+    <div id="film-place-absence" class="page">
+        <nav class="nav"><a href="#home" class="nav-logo">Matthew Cohn</a><div class="nav-menu"><div class="nav-dropdown"><a href="#home" class="nav-item">FILMS</a><div class="nav-dropdown-content"><a href="#film-mom-scientist" class="nav-dropdown-item">My Mom, The Scientist</a><a href="#film-last-spy" class="nav-dropdown-item">The Last Spy</a><a href="#film-place-absence" class="nav-dropdown-item">A Place of Absence</a><a href="#film-strangers-peace" class="nav-dropdown-item">Strangers to Peace</a><a href="#film-through-lens" class="nav-dropdown-item">Through A Lens Darkly</a><a href="#film-councilwoman" class="nav-dropdown-item">Councilwoman</a><a href="#film-bangla-surf" class="nav-dropdown-item">Bangla Surf Girls</a></div></div><a href="#about" class="nav-item">ABOUT</a><a href="#contact" class="nav-item">CONTACT</a></div><div class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></div></nav>
+        <main><div class="film-detail"><a href="#home" class="back-link">← Back to Films</a><div class="film-detail-layout"><div class="film-detail-poster"><a href="https://www.aplacefilm.com/" target="_blank" rel="noopener"><img src="images/a-place-of-absence.png" alt="A Place of Absence"></a></div><div class="film-detail-content"><h1>A Place of Absence</h1><p class="film-detail-year">2025</p><div class="film-detail-section"><h2>Synopsis</h2><p>A group of Central American women travel the migrant route in search of their children who vanished trying to reach the U.S.</p></div><div class="film-detail-section"><h2>Director</h2><p>Marialuisa Ernst</p></div><div class="film-detail-section"><h2>Festivals</h2><p>DOC NYC 2025</p></div><a href="https://www.aplacefilm.com/" target="_blank" rel="noopener" class="film-website-link"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>Visit Official Website</a></div></div></div><div class="page-footer"><div>© 2026 Matthew Cohn</div><div><a href="#contact">Contact</a></div></div></main>
+    </div>
+
+    <div id="film-strangers-peace" class="page">
+        <nav class="nav"><a href="#home" class="nav-logo">Matthew Cohn</a><div class="nav-menu"><div class="nav-dropdown"><a href="#home" class="nav-item">FILMS</a><div class="nav-dropdown-content"><a href="#film-mom-scientist" class="nav-dropdown-item">My Mom, The Scientist</a><a href="#film-last-spy" class="nav-dropdown-item">The Last Spy</a><a href="#film-place-absence" class="nav-dropdown-item">A Place of Absence</a><a href="#film-strangers-peace" class="nav-dropdown-item">Strangers to Peace</a><a href="#film-through-lens" class="nav-dropdown-item">Through A Lens Darkly</a><a href="#film-councilwoman" class="nav-dropdown-item">Councilwoman</a><a href="#film-bangla-surf" class="nav-dropdown-item">Bangla Surf Girls</a></div></div><a href="#about" class="nav-item">ABOUT</a><a href="#contact" class="nav-item">CONTACT</a></div><div class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></div></nav>
+        <main><div class="film-detail"><a href="#home" class="back-link">← Back to Films</a><div class="film-detail-layout"><div class="film-detail-poster"><a href="https://strangerstopeace.com/" target="_blank" rel="noopener"><img src="images/strangers-to-peace.png" alt="Strangers to Peace"></a></div><div class="film-detail-content"><h1>Strangers to Peace</h1><p class="film-detail-year">2022</p><div class="film-detail-section"><h2>Synopsis</h2><p>Three former guerrilla fighters face retribution, anxiety, and danger as they attempt to rebuild their lives after leaving the FARC rebel army and the bloody Colombian conflict. Strangers to Peace intimately captures the personal stories of Dayana, the market vendor navigating her new identity as a trans woman; Ricardo, the young father secretly clinging to his communist ideology; and Alexandra, the indigenous child soldier, who was forced to leave her family behind in the Amazon. Their stories are told through the lens of filmmaker Laura Àngel, who herself was a victim of FARC violence.</p></div><div class="film-detail-section"><h2>Directors/Producers</h2><p>Laura Angel, Noah DeBonis</p></div><div class="film-detail-section"><h2>Awards</h2><ul><li>Award for Excellence in Documentary Directing, New York Latino Film Festival, 2022</li><li>Grand Jury Award for Best Documentary, Sherman Oaks Film Festival, 2022</li><li>Václav Havel Jury Award, One World Festival, 2023</li><li>Best Documentary Award, University Film and Video Association, 2022</li></ul></div><div class="film-detail-section"><h2>Festivals</h2><ul><li>Belfast Film Festival</li><li>Festival Internacional de Cine el Ojo Cojo</li><li>Heartland International Film Festival</li><li>Houston Latino Film Festival</li><li>Miami Film Festival</li><li>Muestra Internacional Documental de Bogotá</li><li>Saarbrücken Latino Film Fest</li><li>San Francisco Latino Film Festival</li><li>Seattle Latino Film Festival</li><li>Toronto Latin American Film Festival</li></ul></div><a href="https://strangerstopeace.com/" target="_blank" rel="noopener" class="film-website-link"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>Visit Official Website</a></div></div></div><div class="page-footer"><div>© 2026 Matthew Cohn</div><div><a href="#contact">Contact</a></div></div></main>
+    </div>
+
+    <div id="film-through-lens" class="page">
+        <nav class="nav"><a href="#home" class="nav-logo">Matthew Cohn</a><div class="nav-menu"><div class="nav-dropdown"><a href="#home" class="nav-item">FILMS</a><div class="nav-dropdown-content"><a href="#film-mom-scientist" class="nav-dropdown-item">My Mom, The Scientist</a><a href="#film-last-spy" class="nav-dropdown-item">The Last Spy</a><a href="#film-place-absence" class="nav-dropdown-item">A Place of Absence</a><a href="#film-strangers-peace" class="nav-dropdown-item">Strangers to Peace</a><a href="#film-through-lens" class="nav-dropdown-item">Through A Lens Darkly</a><a href="#film-councilwoman" class="nav-dropdown-item">Councilwoman</a><a href="#film-bangla-surf" class="nav-dropdown-item">Bangla Surf Girls</a></div></div><a href="#about" class="nav-item">ABOUT</a><a href="#contact" class="nav-item">CONTACT</a></div><div class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></div></nav>
+        <main><div class="film-detail"><a href="#home" class="back-link">← Back to Films</a><div class="film-detail-layout"><div class="film-detail-poster"><a href="http://1world1family.me/through-a-lens-darkly/" target="_blank" rel="noopener"><img src="images/through-a-lens-darkly.jpeg" alt="Through A Lens Darkly"></a></div><div class="film-detail-content"><h1>Through A Lens Darkly</h1><p class="film-detail-year">2014</p><div class="film-detail-section"><h2>Synopsis</h2><p>Filmmaker Thomas Allen Harris investigates the ways in which African American communities have repurposed the camera as a tool designed to enact social change.</p></div><div class="film-detail-section"><h2>Director</h2><p>Thomas Allen Harris</p></div><div class="film-detail-section"><h2>Producers</h2><p>Thomas Allen Harris, Ann Bennett, Don Perry</p></div><div class="film-detail-section"><h2>Broadcast</h2><p>Independent Lens (PBS) Feb. 2015</p></div><div class="film-detail-section"><h2>Awards</h2><ul><li>Outstanding Documentary, NAACP Image Award 2015</li><li>Outstanding Independent, Black Reel Awards 2015</li><li>Best Diaspora Documentary, Africa Movie Academy Awards 2014</li></ul></div><div class="film-detail-section"><h2>Nominations</h2><ul><li>Outstanding Arts and Culture Programming, 37th Annual News & Documentary Emmy Awards</li><li>TEDDY, Berlin International Film Festival</li></ul></div><div class="film-detail-section"><h2>Festivals</h2><ul><li>Documentary Fortnight 2014: MoMA International Festival of Nonfiction Film</li><li>Full Frame Documentary Festival</li><li>Sundance Film Festival</li></ul></div><a href="http://1world1family.me/through-a-lens-darkly/" target="_blank" rel="noopener" class="film-website-link"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>Visit Official Website</a></div></div></div><div class="page-footer"><div>© 2026 Matthew Cohn</div><div><a href="#contact">Contact</a></div></div></main>
+    </div>
+
+    <div id="film-councilwoman" class="page">
+        <nav class="nav"><a href="#home" class="nav-logo">Matthew Cohn</a><div class="nav-menu"><div class="nav-dropdown"><a href="#home" class="nav-item">FILMS</a><div class="nav-dropdown-content"><a href="#film-mom-scientist" class="nav-dropdown-item">My Mom, The Scientist</a><a href="#film-last-spy" class="nav-dropdown-item">The Last Spy</a><a href="#film-place-absence" class="nav-dropdown-item">A Place of Absence</a><a href="#film-strangers-peace" class="nav-dropdown-item">Strangers to Peace</a><a href="#film-through-lens" class="nav-dropdown-item">Through A Lens Darkly</a><a href="#film-councilwoman" class="nav-dropdown-item">Councilwoman</a><a href="#film-bangla-surf" class="nav-dropdown-item">Bangla Surf Girls</a></div></div><a href="#about" class="nav-item">ABOUT</a><a href="#contact" class="nav-item">CONTACT</a></div><div class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></div></nav>
+        <main><div class="film-detail"><a href="#home" class="back-link">← Back to Films</a><div class="film-detail-layout"><div class="film-detail-poster"><a href="https://www.wmm.com/catalog/film/councilwoman/" target="_blank" rel="noopener"><img src="images/councilwoman.jpeg" alt="Councilwoman"></a></div><div class="film-detail-content"><h1>Councilwoman</h1><p class="film-detail-year">2019</p><div class="film-detail-section"><h2>Synopsis</h2><p>Carmen Castillo, a Dominican hotel housekeeper, wins a seat on the city council of Providence, R.I. She has to manage her day job cleaning hotel rooms while advocating for low-income workers as a rookie politician.</p></div><div class="film-detail-section"><h2>Director</h2><p>Margo Guernsey</p></div><div class="film-detail-section"><h2>Producers</h2><p>Margo Guernsey, Patricia Benabe</p></div><div class="film-detail-section"><h2>Broadcast</h2><p>America Reframed (PBS) Sept. 2019</p></div><div class="film-detail-section"><h2>Awards</h2><ul><li>LOLA Award, Philadelphia Latino Film Festival 2019</li></ul></div><div class="film-detail-section"><h2>Festivals</h2><ul><li>Big Sky Documentary Film Festival</li><li>Boston Latino International Film Festival</li><li>Cine Las Americas International Film Festival</li><li>CLiFF</li><li>Dominican Film Festival in New York</li><li>Dumbo Film Festival</li><li>Film Festival for Women's Rights</li><li>Havana Film Festival New York</li><li>Labor Fest</li><li>LALIFF</li><li>Philadelphia Latino Film Festival</li><li>Reel Work May Day Labor Film Festival</li><li>Salem Film Fest</li><li>San Diego Latino Film Festival</li><li>The Workers Unite Film Festival</li><li>UNAFF International Documentary Film Festival</li></ul></div><a href="https://www.wmm.com/catalog/film/councilwoman/" target="_blank" rel="noopener" class="film-website-link"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>Visit Official Website</a></div></div></div><div class="page-footer"><div>© 2026 Matthew Cohn</div><div><a href="#contact">Contact</a></div></div></main>
+    </div>
+
+    <div id="film-bangla-surf" class="page">
+        <nav class="nav"><a href="#home" class="nav-logo">Matthew Cohn</a><div class="nav-menu"><div class="nav-dropdown"><a href="#home" class="nav-item">FILMS</a><div class="nav-dropdown-content"><a href="#film-mom-scientist" class="nav-dropdown-item">My Mom, The Scientist</a><a href="#film-last-spy" class="nav-dropdown-item">The Last Spy</a><a href="#film-place-absence" class="nav-dropdown-item">A Place of Absence</a><a href="#film-strangers-peace" class="nav-dropdown-item">Strangers to Peace</a><a href="#film-through-lens" class="nav-dropdown-item">Through A Lens Darkly</a><a href="#film-councilwoman" class="nav-dropdown-item">Councilwoman</a><a href="#film-bangla-surf" class="nav-dropdown-item">Bangla Surf Girls</a></div></div><a href="#about" class="nav-item">ABOUT</a><a href="#contact" class="nav-item">CONTACT</a></div><div class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></div></nav>
+        <main><div class="film-detail"><a href="#home" class="back-link">← Back to Films</a><div class="film-detail-layout"><div class="film-detail-poster"><a href="https://insyncmedia.ca/documentary/bangla-surf-girls/" target="_blank" rel="noopener"><img src="images/bangla-surf-girls.jpg" alt="Bangla Surf Girls"></a></div><div class="film-detail-content"><h1>Bangla Surf Girls</h1><p class="film-detail-year">2021</p><div class="film-detail-section"><h2>Synopsis</h2><p>Never have the stakes and the waves been so high. Bangla Surf Girls is an immersive documentary that takes us into the heart of Cox's Bazar in Bangladesh.</p></div><div class="film-detail-section"><h2>Director</h2><p>Elizabeth D. Costa</p></div><div class="film-detail-section"><h2>Producer</h2><p>Lalita Krishna</p></div><div class="film-detail-section"><h2>Awards</h2><ul><li>Best Canadian Feature Film or Documentary, Oakville Film Festival 2021</li><li>Indie Spirit Award, New Hope Film Festival 2021</li></ul></div><div class="film-detail-section"><h2>Festivals</h2><ul><li>Hot Docs 2021</li></ul></div><a href="https://insyncmedia.ca/documentary/bangla-surf-girls/" target="_blank" rel="noopener" class="film-website-link"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>Visit Official Website</a></div></div></div><div class="page-footer"><div>© 2026 Matthew Cohn</div><div><a href="#contact">Contact</a></div></div></main>
+    </div>
+
+    <div id="about" class="page">
+        <nav class="nav"><a href="#home" class="nav-logo">Matthew Cohn</a><div class="nav-menu"><div class="nav-dropdown"><a href="#home" class="nav-item">FILMS</a><div class="nav-dropdown-content"><a href="#film-mom-scientist" class="nav-dropdown-item">My Mom, The Scientist</a><a href="#film-last-spy" class="nav-dropdown-item">The Last Spy</a><a href="#film-place-absence" class="nav-dropdown-item">A Place of Absence</a><a href="#film-strangers-peace" class="nav-dropdown-item">Strangers to Peace</a><a href="#film-through-lens" class="nav-dropdown-item">Through A Lens Darkly</a><a href="#film-councilwoman" class="nav-dropdown-item">Councilwoman</a><a href="#film-bangla-surf" class="nav-dropdown-item">Bangla Surf Girls</a></div></div><a href="#about" class="nav-item">ABOUT</a><a href="#contact" class="nav-item">CONTACT</a></div><div class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></div></nav>
+        <main>
+            <div class="about-hero-image"><img src="images/MattCohnaboutimage.jpeg" alt="Matthew Cohn"></div>
+            <div class="about-content-section">
+                <h1>Matthew Cohn</h1>
+                <p class="about-title-label">Documentary Editor</p>
+                <div class="about-bio">
+                    <p>Matthew has been working as a documentary editor since 2014. Films he's worked on have shown at numerous festivals including Cannes, Sundance, and Hot Docs where they have won various awards and were subsequently broadcast on PBS and picked up by multiple streaming services. He enjoys working on character-driven stories whose emotional journeys push the boundaries of narrative structure.</p>
+                </div>
+                <a href="https://www.imdb.com/name/nm4036422/" target="_blank" rel="noopener" class="imdb-button">
+                    <svg viewBox="0 0 64 32" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="32" rx="4" fill="#f5c518"/><text x="32" y="22" font-family="Arial,sans-serif" font-size="14" font-weight="bold" fill="#000" text-anchor="middle">IMDb</text></svg>
+                    View on IMDb
+                </a>
+            </div>
+            <div class="page-footer"><div>© 2026 Matthew Cohn</div><div><a href="#contact">Contact</a></div></div>
+        </main>
+    </div>
+
+    <div id="contact" class="page">
+        <nav class="nav"><a href="#home" class="nav-logo">Matthew Cohn</a><div class="nav-menu"><div class="nav-dropdown"><a href="#home" class="nav-item">FILMS</a><div class="nav-dropdown-content"><a href="#film-mom-scientist" class="nav-dropdown-item">My Mom, The Scientist</a><a href="#film-last-spy" class="nav-dropdown-item">The Last Spy</a><a href="#film-place-absence" class="nav-dropdown-item">A Place of Absence</a><a href="#film-strangers-peace" class="nav-dropdown-item">Strangers to Peace</a><a href="#film-through-lens" class="nav-dropdown-item">Through A Lens Darkly</a><a href="#film-councilwoman" class="nav-dropdown-item">Councilwoman</a><a href="#film-bangla-surf" class="nav-dropdown-item">Bangla Surf Girls</a></div></div><a href="#about" class="nav-item">ABOUT</a><a href="#contact" class="nav-item">CONTACT</a></div><div class="hamburger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></div></nav>
+        <main>
+            <div class="contact-content">
+                <h1>Get in Touch</h1>
+                <p class="contact-subtitle">Have a project in mind? I'd love to hear from you.</p>
+                <form class="contact-form" id="contact-form">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" required placeholder="What's this about?">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" required placeholder="Tell me about your project..."></textarea>
+                    </div>
+                    <button type="submit" class="submit-button">Send Message</button>
+                    <div class="form-status" id="form-status"></div>
+                </form>
+            </div>
+            <div class="page-footer"><div>© 2026 Matthew Cohn</div><div></div></div>
+        </main>
+    </div>
+
+    <div class="mobile-menu" id="global-mobile-menu">
+        <a href="#home" class="mobile-menu-item" onclick="closeMobileMenu()">FILMS</a>
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-section-title">All Films</div>
+            <a href="#film-mom-scientist" class="mobile-film-item" onclick="closeMobileMenu()">My Mom, The Scientist</a>
+            <a href="#film-last-spy" class="mobile-film-item" onclick="closeMobileMenu()">The Last Spy</a>
+            <a href="#film-place-absence" class="mobile-film-item" onclick="closeMobileMenu()">A Place of Absence</a>
+            <a href="#film-strangers-peace" class="mobile-film-item" onclick="closeMobileMenu()">Strangers to Peace</a>
+            <a href="#film-through-lens" class="mobile-film-item" onclick="closeMobileMenu()">Through A Lens Darkly</a>
+            <a href="#film-councilwoman" class="mobile-film-item" onclick="closeMobileMenu()">Councilwoman</a>
+            <a href="#film-bangla-surf" class="mobile-film-item" onclick="closeMobileMenu()">Bangla Surf Girls</a>
+        </div>
+        <a href="#about" class="mobile-menu-item" onclick="closeMobileMenu()">ABOUT</a>
+        <a href="#contact" class="mobile-menu-item" onclick="closeMobileMenu()">CONTACT</a>
+    </div>
+
+    <script>
+        function toggleMobileMenu() {
+            var h = document.querySelectorAll('.hamburger');
+            var m = document.getElementById('global-mobile-menu');
+            h.forEach(function(x) { x.classList.toggle('active'); });
+            m.classList.toggle('active');
+            document.body.style.overflow = m.classList.contains('active') ? 'hidden' : '';
+        }
+        function closeMobileMenu() {
+            var h = document.querySelectorAll('.hamburger');
+            var m = document.getElementById('global-mobile-menu');
+            h.forEach(function(x) { x.classList.remove('active'); });
+            m.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        function showPage(hash) {
+            var pages = document.querySelectorAll('.page');
+            pages.forEach(function(p) { p.classList.remove('active'); });
+            var targetId = hash.replace('#', '') || 'home';
+            var targetPage = document.getElementById(targetId);
+            if (targetPage) { targetPage.classList.add('active'); } else { document.getElementById('home').classList.add('active'); }
+            var logos = document.querySelectorAll('.nav-logo');
+            logos.forEach(function(logo) {
+                if (targetId === 'home' || !hash) { logo.classList.add('hidden-on-home'); } else { logo.classList.remove('hidden-on-home'); }
+            });
+            window.scrollTo(0, 0);
+            closeMobileMenu();
+        }
+        window.addEventListener('hashchange', function() { showPage(window.location.hash); });
+        document.addEventListener('DOMContentLoaded', function() { showPage(window.location.hash); });
+        document.addEventListener('click', function(e) {
+            if (e.target.matches('a[href^="#"]') || e.target.closest('a[href^="#"]')) {
+                var link = e.target.matches('a[href^="#"]') ? e.target : e.target.closest('a[href^="#"]');
+                var hash = link.getAttribute('href');
+                window.location.hash = hash;
+                e.preventDefault();
+            }
+        });
+        // Contact form handling via Formspree
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var form = this;
+            var status = document.getElementById('form-status');
+            var submitBtn = form.querySelector('.submit-button');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            var formData = new FormData(form);
+            fetch('https://formspree.io/f/maqqweqw', {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            }).then(function(response) {
+                if (response.ok) {
+                    status.className = 'form-status success';
+                    status.textContent = 'Thank you! Your message has been sent.';
+                    form.reset();
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            }).catch(function(error) {
+                status.className = 'form-status error';
+                status.textContent = 'Oops! There was a problem sending your message. Please try again.';
+            }).finally(function() {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+            });
+        });
+    </script>
+</body>
+</html>
